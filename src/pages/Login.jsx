@@ -3,7 +3,7 @@ import Logo from '../assets/logo.png'
 
 const Login = () => {
   return (
-    <div className='flex items-center justify-center h-screen bg-slate-600'>
+    <div className='flex items-center justify-center h-screen bg-main'>
         <div className='py-6 px-10 bg-white rounded-md w-[30%]'>
             <div className='flex flex-col justify-center items-center'>
                 <img src={Logo} width={175} alt="logo" srcset="" />
