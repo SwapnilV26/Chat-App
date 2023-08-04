@@ -3,7 +3,7 @@ import Messege from './Messege'
 
 const Messeges = () => {
   return (
-    <div className='bg-sky-100 p-3 h-[82.3%] overflow-scroll'>
+    <div className='bg-sky-100 p-3 h-[82.3%] overflow-y-scroll'>
         <Messege />
         <Messege />
         <Messege />
