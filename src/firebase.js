@@ -1,17 +1,19 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDGuQU-BdEVQBkbxQo3mtEbEOKpgMqiHXg",
-  authDomain: "letstalk-4285b.firebaseapp.com",
-  projectId: "letstalk-4285b",
-  storageBucket: "letstalk-4285b.appspot.com",
-  messagingSenderId: "634469037937",
-  appId: "1:634469037937:web:ba3c0f383ec0a9ac8ee8d0"
+  apiKey: "AIzaSyCewDgQTYhpWktoAPLVr3OnFcCBa7p_ie0",
+  authDomain: "letstalk-1c5d1.firebaseapp.com",
+  projectId: "letstalk-1c5d1",
+  storageBucket: "letstalk-1c5d1.appspot.com",
+  messagingSenderId: "531227181567",
+  appId: "1:531227181567:web:72a5fbd46f3b2c2afb67ca"
 };
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
-export const auth = getAuth();
+export const auth = getAuth(app);
 export const storage = getStorage();
+export const db = getFirestore();

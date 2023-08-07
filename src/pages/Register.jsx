@@ -1,42 +1,51 @@
 import React from 'react'
 import Logo from '../assets/logo.png'
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from "../firebase";
-import { storage } from "../firebase";
+import { auth, db, storage } from "../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { doc, setDoc } from "firebase/firestore"
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
+
+    const navigate = useNavigate();
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const name = e.target[0].value;
         const email = e.target[1].value;
         const password = e.target[2].value;
         const file = e.target[3].files[0];
+        console.log(name, email, password, file);
 
         try {
+            //create user
             const res = await createUserWithEmailAndPassword(auth, email, password);
-            
+
             const storageRef = ref(storage, name);
 
-            const uploadTask = uploadBytesResumable(storageRef, file);
-
-            uploadTask.on(
-                (error) => {
-                    // Handle unsuccessful uploads
-                    alert("Something went wrong");
-                },
-                () => {
-                    // Handle successful uploads on complete
-                    getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-                        await updateProfile(res.user, {
-                            displayName: name,
-                            photoURL: downloadURL
-                        })
+            uploadBytesResumable(storageRef, file).then(()=>{
+                getDownloadURL(storageRef).then(async (downloadURL) => {
+                    await updateProfile(res.user, {
+                        displayName: name,
+                        photoURL: downloadURL
                     });
-                    console.log(res)
-                }
-            );
+                    await setDoc(doc(db, "users", res.user.uid), {
+                        uid: res.user.uid,
+                        displayName: name,
+                        email,
+                        photoURL: downloadURL,
+                    })
+                });
+            });
+
+            //create empty user chats on firestore
+            await setDoc(doc(db, "userChats", res.user.uid), {});
+            navigate("/");
+
+            console.log(res.user)
         } catch (error) {
+            console.error("Error getting download URL:", error);
             alert("Something went wrong");
         }
     }
@@ -67,10 +76,10 @@ const Register = () => {
                         <input type="file" name="img" accept="image/*" className="mt-3 bg-gray-50 border border-gray-300 text-gray-900 sm:text-base rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-1" />
                     </div>
 
-                    <button type="submit" className="w-full my-4 text-white bg-blue-500 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2 text-center">Create an account</button>
+                    <button type="submit" className="w-full my-4 text-white bg-blue-500 hover:bg-blue-700 font-medium rounded-lg text-base px-5 py-2 text-center">Create an account</button>
                     <hr />
                     <p className="text-base text-center font-normal text-gray-500">
-                        Already have an account? <a className="font-medium text-blue-600 hover:underline">Login here</a>
+                        Already have an account? <a href="/" className="font-medium text-blue-600 hover:underline">Login here</a>
                     </p>
                 </form>
             </div>
