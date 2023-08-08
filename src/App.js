@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { Children, useContext } from "react";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -8,16 +8,12 @@ import { AuthContext } from "./context/AuthContext";
 function App() {
 
   const {currentUser} = useContext(AuthContext);
-  const ProtectedRoute = ({chiildren})=>{
-    if(!currentUser){
-       return <Navigate to='/login' />
-    }
-  }
+  // console.log(currentUser);
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route exact path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+        <Route exact path="/" element={currentUser ? <Home /> : <Navigate to="/login" />} />
         <Route Exact path="/login" element={<Login />} />
         <Route Exact path="/register" element={<Register />} />
       </Routes>
