@@ -58,7 +58,8 @@ const Search = () => {
         })
       }
     } catch (error) {
-
+      setUser(null);
+      setUsername("");
     }
   }
 
