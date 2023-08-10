@@ -11,11 +11,12 @@ module.exports = {
           dark: '#0e7490',
         },
         'main': {
-          DEFAULT: '#1ca7ec',
+          DEFAULT: '#787ff6',
+          // DEFAULT: '#1ca7ec',
           dark: '#1ca7ec',
         },
         'chat': {
-          DEFAULT: '#00927e',
+          DEFAULT: '#787ff6',
         },
       }
     },

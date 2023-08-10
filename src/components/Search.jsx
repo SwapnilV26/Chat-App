@@ -57,24 +57,24 @@ const Search = () => {
           [combinedId + ".date"]: serverTimestamp()
         })
       }
-    } catch (error) {
       setUser(null);
       setUsername("");
+    } catch (error) {
     }
   }
 
   return (
-    <div className='border-b-2'>
+    <div className='border-b-[1px] border-slate-300'>
       {/* searchForm */}
-      <div className="m-3 relative bg-transparent opacity-75 rounded-md">
+      <div className="m-3 relative rounded-md">
         <div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none'>
-          <BsSearch className='text-gray-400' />
+          <BsSearch className='text-violet-500' />
         </div>
         <input type="text" placeholder='Find a user'
           value={username}
           onKeyDown={handleKey}
           onChange={(e) => { setUsername(e.target.value) }}
-          className='placeholder:text-gray-400 rounded p-1.5 outline-none pl-10 w-full text-sm'
+          className='placeholder:text-gray-400 rounded p-1.5 bg-black outline-violet-500 pl-10 w-full text-sm'
         />
       </div>
 

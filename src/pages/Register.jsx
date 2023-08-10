@@ -61,7 +61,7 @@ const Register = () => {
         <div className='flex items-center justify-center h-screen bg-slate-600'>
             <div className='py-6 px-8 bg-white rounded-md m-2 md:w-[30%]'>
                 <div className='flex flex-col justify-center items-center'>
-                    <img src={Logo} width={175} alt="logo" srcset="" />
+                    <img src={Logo} width={175} alt="logo" />
                     <span className='text-center font-medium text-lg underline'>Register here</span>
                 </div>
                 <form onSubmit={handleSubmit}>
