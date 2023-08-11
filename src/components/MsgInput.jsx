@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
-import { IoMdAttach } from 'react-icons/io'
-import { BiImageAdd } from 'react-icons/bi'
+import { MdSend } from 'react-icons/md'
+import { RiAttachment2 } from 'react-icons/ri'
 import { ChatContext } from '../context/ChatContext';
 import { AuthContext } from '../context/AuthContext';
 import { Timestamp, arrayUnion, doc, serverTimestamp, updateDoc } from 'firebase/firestore';
@@ -10,16 +10,16 @@ import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
 
 const MsgInput = () => {
   const [text, setText] = useState("");
-  const [img, setImg] = useState(null);
+  const [file, setFile] = useState(null);
 
   const { currentUser } = useContext(AuthContext);
   const { data } = useContext(ChatContext);
 
   const handleSend = async () => {
-    if (img) {
+    if (file) {
       const storageRef = ref(storage, uuid());
 
-      await uploadBytesResumable(storageRef, img).then(() => {
+      await uploadBytesResumable(storageRef, file).then(() => {
         getDownloadURL(storageRef).then(async (downloadURL) => {
           await updateDoc(doc(db, "chats", data.chatId), {
             messages: arrayUnion({
@@ -27,12 +27,12 @@ const MsgInput = () => {
               text,
               senderId: currentUser.uid,
               date: Timestamp.now(),
-              img: downloadURL
+              file: downloadURL
             })
           });
         });
       });
-    } else {
+    } else if (text !== "") {
       // Set the "messages" field of the chats 'chatId'
       await updateDoc(doc(db, "chats", data.chatId), {
         messages: arrayUnion({
@@ -42,6 +42,8 @@ const MsgInput = () => {
           date: Timestamp.now(),
         })
       });
+    } else {
+      alert("Please write msg first.")
     }
 
     // last msg for sidebar
@@ -60,20 +62,19 @@ const MsgInput = () => {
     });
 
     setText("");
-    setImg(null);
+    setFile(null);
   }
 
   return (
-    <div className='bg-white h-14 p-3 flex justify-between items-center'>
-      <input type="text" placeholder='Type something...' value={text} onChange={(e) => { setText(e.target.value) }} className='w-full mr-5 outline-none' />
-      <div className='flex gap-3 items-center'>
-        <IoMdAttach className='text-xl text-gray-500' />
-        <input type="file" name="" id="file" className='hidden' onChange={(e) => { setImg(e.target.files[0]) }} />
+    <div className='bg-main-light h-14 flex justify-between items-center'>
+      <div className='bg-white flex items-center justify-between mx-3 w-full rounded-full border-[1px] border-gray-400 p-2'>
+        <input type="text" placeholder='Type something...' value={text} onChange={(e) => { setText(e.target.value) }} className='w-full mx-3 outline-none' />
+        <input type="file" name="" id="file" className='hidden' onChange={(e) => { setFile(e.target.files[0]) }} />
         <label htmlFor="file">
-          <BiImageAdd className={`text-2xl  cursor-pointer ${img ? "text-red-500": 'text-gray-500' }`} />
+          <RiAttachment2 className={`text-2xl mr-2 cursor-pointer ${file ? "text-red-500" : 'text-gray-500'}`} />
         </label>
-        <button type="button" onClick={handleSend} className='bg-red-500 px-3 py-1 rounded'>Send</button>
       </div>
+      <button type="button" onClick={handleSend} className='bg-main text-white px-3 py-1.5 text-[25px] rounded-md mr-3'><MdSend /></button>
     </div>
   )
 }

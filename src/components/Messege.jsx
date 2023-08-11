@@ -25,7 +25,7 @@ const Messege = ({ msg }) => {
             {/* msg content  */}
             <div className='flex flex-col items-end max-w-[70%] gap-3'>
               <p className='bg-chat text-white px-5 py-1 rounded-lg rounded-tr-none max-w-max'>{msg.text}</p>
-              <img src={msg.img} className='w-[50%]' alt="" />
+              <img src={msg.file} className='w-[50%]' alt="" />
             </div>
           </div>
           :
@@ -37,7 +37,7 @@ const Messege = ({ msg }) => {
 
             <div className='flex flex-col max-w-[70%] gap-3'>
               <p className='bg-white px-5 py-1 rounded-lg rounded-tl-none max-w-max'>{msg.text}</p>
-              <img src={msg.img} className='w-[50%]' alt="" />
+              <img src={msg.file} className='w-[50%]' alt="" />
             </div>
           </div>
       }

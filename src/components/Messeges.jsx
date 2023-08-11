@@ -20,7 +20,7 @@ const Messeges = () => {
   }, [data.chatId]);
 
   return (
-    <div className='bg-sky-100 p-3 h-[82.3%] overflow-y-scroll'>
+    <div className='bg-main-light p-3 h-[82.3%] overflow-y-scroll'>
         {messages.map((msg)=>(
           <Messege msg={msg} key={msg.id} />
         ))}        

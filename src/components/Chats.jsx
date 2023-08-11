@@ -30,12 +30,14 @@ const Chats = () => {
 
   return (
     <>
-      {Object.entries(chats)?.sort((a,b)=>b[1].date - a[1].date).map((chat) => (
-        <div key={chat[0]} onClick={() => handleSelect(chat[1].userInfo)} className="border-b-[1px] border-slate-300 flex items-center gap-2 pl-3 py-1.5 cursor-pointer hover:bg-side-dark">
-          <img src={chat[1].userInfo.photoURL} className='rounded-full w-12 h-12 border-2 border-side object-cover' alt="" />
+      {Object.entries(chats)?.sort((a, b) => b[1].date - a[1].date).map((chat) => (
+        <div key={chat[0]}
+          onClick={() => handleSelect(chat[1].userInfo)}
+          className="border-b-[1px] group border-slate-300 flex items-center gap-2 pl-3 py-1.5 cursor-pointer hover:bg-side">
+          <img src={chat[1]?.userInfo?.photoURL} className='rounded-full w-12 h-12 border-2 border-side group-hover:border-white object-cover' alt="" />
           <div className='h-12 overflow-hidden'>
-            <span className='text-lg text-gray-900 font-medium'>{chat[1].userInfo.displayName}</span>
-            <p className='text-sm text-gray-500'>{chat[1].lastMessage?.text}</p>
+            <span className='text-lg text-gray-900 font-medium group-hover:text-white'>{chat[1]?.userInfo?.displayName}</span>
+            <p className='text-sm text-gray-500 group-hover:text-gray-200'>{chat[1].lastMessage?.text}</p>
           </div>
         </div>
       ))}
