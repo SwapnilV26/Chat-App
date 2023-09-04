@@ -1,19 +1,27 @@
 import React, { useContext } from 'react'
 import { MdPersonAddAlt1 } from 'react-icons/md'
 import { BsCameraVideoFill } from 'react-icons/bs'
-import { FiMoreHorizontal } from 'react-icons/fi'
+import { FiArrowLeft, FiMoreHorizontal } from 'react-icons/fi'
 import Messeges from './Messeges'
 import MsgInput from './MsgInput'
 import { ChatContext } from '../context/ChatContext'
+import { AuthContext } from '../context/AuthContext'
+import ProfilePic from '../assets/Profile Icon.png'
 
 const ChatSection = () => {
   const { data } = useContext(ChatContext);
+  const { chatWidth, setChatWidth, setSideWidth } = useContext(AuthContext);
+  console.log(chatWidth);
+  
   return (
-    <div className='w-[65%]'>
+    <main className={`w-[${chatWidth}] h-[100%] md:w-[60%] lg:w-[65%] bg-main-light relative`}>
       {/* Chat info  */}
-      <div className='flex justify-between items-center h-14 p-3 bg-main'>
+      <section className='flex justify-between items-center h-14 p-3 bg-main'>
         <div className='flex items-center gap-1'>
-          <img src={data.user?.photoURL} alt="Profile Pic" className='rounded-full w-9 h-9 object-cover' />
+          <button onClick={()=>{setChatWidth(0); setSideWidth('100%')}} className='md:hidden'>
+            <FiArrowLeft size={22} className='text-slate-100'/>
+          </button>
+          <img src={data.user?.photoURL ? data.user.photoURL : ProfilePic} alt="Profile Pic" className='rounded-full w-9 h-9 object-cover' />
           <span className='font-medium text-white text-lg'>{data.user?.displayName}</span>
         </div>
         <div className='flex gap-3 text-xl'>
@@ -21,11 +29,11 @@ const ChatSection = () => {
           <BsCameraVideoFill className='text-slate-100' />
           <FiMoreHorizontal className='text-slate-100' />
         </div>
-      </div>
+      </section>
 
       <Messeges />
       <MsgInput />
-    </div>
+    </main>
   )
 }
 

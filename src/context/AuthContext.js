@@ -6,10 +6,13 @@ export const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState({});
+  const [sideWidth, setSideWidth] = useState(0);
+  const [chatWidth, setChatWidth] = useState(0);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
+      setSideWidth('100%')
       console.log(user);
     });
 
@@ -19,7 +22,7 @@ export const AuthContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ currentUser }}>
+    <AuthContext.Provider value={{ currentUser, chatWidth, setChatWidth, sideWidth, setSideWidth }}>
       {children}
     </AuthContext.Provider>
   );

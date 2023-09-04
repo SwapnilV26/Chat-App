@@ -18,13 +18,16 @@ const Login = () => {
             await signInWithEmailAndPassword(auth, email, password);
             navigate("/");
         } catch (error) {
-            alert("Something went wrong");
+            alert("User doesn't exist. Please register first!");
         }
+
+        setEmail("");
+        setPassword(""); 
     }
 
     return (
-        <div className='flex items-center justify-center h-screen bg-main'>
-            <div className='py-6 px-10 bg-white rounded-md w-[30%]'>
+        <div className='flex items-center justify-center h-screen bg-[url(./assets/bg-img2.jpg)] bg-cover bg-no-repeat'>
+            <div className='py-6 px-10 bg-white rounded-md lg:w-[30%]'>
                 <div className='flex flex-col justify-center items-center'>
                     <img src={Logo} width={175} alt="logo" />
                     <span className='text-center font-medium text-lg underline'>Login here</span>

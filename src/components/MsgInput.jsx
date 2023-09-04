@@ -16,6 +16,11 @@ const MsgInput = () => {
   const { data } = useContext(ChatContext);
 
   const handleSend = async () => {
+    if (text.trim() === "") {
+      alert("Please write a message first!");
+      return;
+    }
+
     if (file) {
       const storageRef = ref(storage, uuid());
 
@@ -32,7 +37,7 @@ const MsgInput = () => {
           });
         });
       });
-    } else if (text !== "") {
+    } else {
       // Set the "messages" field of the chats 'chatId'
       await updateDoc(doc(db, "chats", data.chatId), {
         messages: arrayUnion({
@@ -42,8 +47,6 @@ const MsgInput = () => {
           date: Timestamp.now(),
         })
       });
-    } else {
-      alert("Please write msg first.")
     }
 
     // last msg for sidebar
@@ -66,16 +69,24 @@ const MsgInput = () => {
   }
 
   return (
-    <div className='bg-main-light h-14 flex justify-between items-center'>
-      <div className='bg-white flex items-center justify-between mx-3 w-full rounded-full border-[1px] border-gray-400 p-2'>
+    <section className='h-14 w-[100%] absolute bottom-0 flex justify-between items-center'>
+      <div
+        onKeyDown={(e) => { e.code === "Enter" && handleSend() }}
+        className='bg-white flex items-center justify-between mx-3 w-full rounded-full border-[1px] border-gray-400 p-2'
+      >
         <input type="text" placeholder='Type something...' value={text} onChange={(e) => { setText(e.target.value) }} className='w-full mx-3 outline-none' />
-        <input type="file" name="" id="file" className='hidden' onChange={(e) => { setFile(e.target.files[0]) }} />
+        <input type="file" name="" id="file" accept='image/*' className='hidden' onChange={(e) => { setFile(e.target.files[0]) }} />
         <label htmlFor="file">
           <RiAttachment2 className={`text-2xl mr-2 cursor-pointer ${file ? "text-red-500" : 'text-gray-500'}`} />
         </label>
       </div>
-      <button type="button" onClick={handleSend} className='bg-main text-white px-3 py-1.5 text-[25px] rounded-md mr-3'><MdSend /></button>
-    </div>
+      <button type="button"
+        onClick={handleSend}
+        className='bg-main text-white px-3 py-1.5 text-[25px] rounded-md mr-3'
+      >
+        <MdSend />
+      </button>
+    </section>
   )
 }
 

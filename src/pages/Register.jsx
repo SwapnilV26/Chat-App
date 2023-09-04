@@ -5,6 +5,7 @@ import { auth, db, storage } from "../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore"
 import { useNavigate, Link } from 'react-router-dom';
+// import ProfilePic from '../assets/Profile Icon.png'
 
 const Register = () => {
     const navigate = useNavigate();
@@ -16,7 +17,7 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // console.log(name, email, password, file);
+        console.log(name, email, password, file);
 
         try {
             //create user
@@ -32,7 +33,7 @@ const Register = () => {
                     });
                     await setDoc(doc(db, "users", res.user.uid), {
                         uid: res.user.uid,
-                        displayName: name,
+                        displayName: name.toLocaleLowerCase(),
                         email,
                         photoURL: downloadURL,
                     })
@@ -58,8 +59,8 @@ const Register = () => {
     }
 
     return (
-        <div className='flex items-center justify-center h-screen bg-slate-600'>
-            <div className='py-6 px-8 bg-white rounded-md m-2 md:w-[30%]'>
+        <div className='flex items-center justify-center h-screen bg-main'>
+            <div className='py-6 px-8 bg-white rounded-md m-2 lg:w-[30%]'>
                 <div className='flex flex-col justify-center items-center'>
                     <img src={Logo} width={175} alt="logo" />
                     <span className='text-center font-medium text-lg underline'>Register here</span>
@@ -75,7 +76,7 @@ const Register = () => {
                     </div>
                     <div>
                         <label htmlFor="password" className="block mb-1 text-base font-medium text-gray-900">Password</label>
-                        <input type="password" value={password} onChange={(e)=>{setPassword(e.target.value)}} name="password" placeholder="Enter password here..." className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-base rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2 " required />
+                        <input type="password" value={password} onChange={(e)=>{setPassword(e.target.value)}} name="password" placeholder="Enter password here..." className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-base rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2" required />
                     </div>
 
                     <div className='flex'>
