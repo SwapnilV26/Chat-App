@@ -5,9 +5,6 @@ import Chats from './Chats'
 import { AuthContext } from '../context/AuthContext'
 
 const Sidebar = () => {
-  const { sideWidth } = useContext(AuthContext);
-  console.log(sideWidth)
-
   return (
     <div className={`w-[100%] md:w-[40%] lg:w-[35%] bg-white md:border-r-2`}>
         <Navbar />

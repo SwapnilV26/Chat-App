@@ -9,8 +9,7 @@ import ProfilePic from "../assets/Profile Icon.png";
 
 const ChatSection = () => {
   const { data, selected } = useContext(ChatContext);
-  const { chatWidth, setShow } = useContext(AuthContext);
-  console.log(chatWidth);
+  const { setShow } = useContext(AuthContext);
 
   return (
     <main
