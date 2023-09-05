@@ -53,7 +53,7 @@ const ChatSection = () => {
             <ol className="ml-8 text-base list-decimal">
               <li className="md:hidden">Click on start button given below</li>
               <li>Click on the search bar</li>
-              <li>Find the user by typing their name and HIT_ENTER</li>
+              <li>Find the user by typing their name and click on search button or HIT_ENTER</li>
               <li>Select the user and Enjoy your chatting</li>
             </ol>
             <p className="mt-2 text-base hidden md:block">

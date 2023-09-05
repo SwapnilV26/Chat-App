@@ -61,7 +61,7 @@ const Messege = ({ msg }) => {
               </button>
               { msg?.file && <img src={msg.file} className='w-[85%] lg:w-[60%] -mb-2' alt="received file" /> }
               { msg?.text && <p className='bg-white px-5 group-hover:pl-7 py-1 rounded-lg rounded-tl-none max-w-max'>{msg.text}</p> }
-              { msg?.date && <span className='text-[12px] text-gray-500 -mt-3'>{msgTime}</span> }
+              { msg?.date && <span className={`text-[12px] text-gray-500 ${msg?.text ? '-mt-3' : '-mt-1'}`}>{msgTime}</span> }
             </div>
           </div>
       }
