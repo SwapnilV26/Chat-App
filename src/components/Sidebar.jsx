@@ -9,7 +9,7 @@ const Sidebar = () => {
   console.log(sideWidth)
 
   return (
-    <div className={`w-[${sideWidth}] md:w-[40%] lg:w-[35%] bg-white md:border-r-2`}>
+    <div className={`w-[100%] md:w-[40%] lg:w-[35%] bg-white md:border-r-2`}>
         <Navbar />
         <Search />
         <Chats />

@@ -11,7 +11,12 @@ const Search = () => {
   const { currentUser } = useContext(AuthContext);
 
   const handleSearch = async () => {
-    const q = query(collection(db, "users"), where("displayName", ">=", username.toLocaleLowerCase()));
+    if(username.trim() === ""){
+      return;
+    }
+    const q = query(collection(db, "users"),
+      where("displayName", "==", username.toLocaleLowerCase())
+    );
 
     try {
       const querySnapshot = await getDocs(q);
@@ -39,23 +44,44 @@ const Search = () => {
         await setDoc(doc(db, "chats", combinedId), { messages: [] });
 
         // create user chats
-        await updateDoc(doc(db, "userChats", currentUser.uid), {
-          [combinedId + ".userInfo"]: {
-            uid: user.uid,
-            displayName: user.displayName,
-            photoURL: user.photoURL
-          },
-          [combinedId + ".date"]: serverTimestamp()
-        })
-
-        await updateDoc(doc(db, "userChats", user.uid), {
-          [combinedId + ".userInfo"]: {
-            uid: currentUser.uid,
-            displayName: currentUser.displayName,
-            photoURL: currentUser.photoURL
-          },
-          [combinedId + ".date"]: serverTimestamp()
-        })
+        if(user.photoURL){
+          await updateDoc(doc(db, "userChats", currentUser.uid), {
+            [combinedId + ".userInfo"]: {
+              uid: user.uid,
+              displayName: user.displayName,
+              photoURL: user.photoURL
+            },
+            [combinedId + ".date"]: serverTimestamp()
+          })
+        } else {
+          await updateDoc(doc(db, "userChats", currentUser.uid), {
+            [combinedId + ".userInfo"]: {
+              uid: user.uid,
+              displayName: user.displayName,
+            },
+            [combinedId + ".date"]: serverTimestamp()
+          })
+        }
+       
+        if(currentUser.photoURL){
+          await updateDoc(doc(db, "userChats", user.uid), {
+            [combinedId + ".userInfo"]: {
+              uid: currentUser.uid,
+              displayName: currentUser.displayName,
+              photoURL: currentUser.photoURL
+            },
+            [combinedId + ".date"]: serverTimestamp()
+          })
+        } else {
+          await updateDoc(doc(db, "userChats", user.uid), {
+            [combinedId + ".userInfo"]: {
+              uid: currentUser.uid,
+              displayName: currentUser.displayName,
+            },
+            [combinedId + ".date"]: serverTimestamp()
+          })
+        }
+       
       }
       setUser(null);
       setUsername("");

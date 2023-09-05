@@ -3,6 +3,7 @@ import Logo from '../assets/logo.png'
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { Link, useNavigate } from 'react-router-dom';
 import { auth } from '../firebase';
+import { toast } from 'react-toastify';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -16,9 +17,10 @@ const Login = () => {
 
         try {
             await signInWithEmailAndPassword(auth, email, password);
+            toast.success("Authenticated successfully")
             navigate("/");
         } catch (error) {
-            alert("User doesn't exist. Please register first!");
+            toast.error("User doesn't exist. Please register first!");
         }
 
         setEmail("");
@@ -26,7 +28,7 @@ const Login = () => {
     }
 
     return (
-        <div className='flex items-center justify-center h-screen bg-[url(./assets/bg-img2.jpg)] bg-cover bg-no-repeat'>
+        <div className='flex items-center justify-center h-screen bg-[url(./assets/bg-img3.jpg)] bg-cover bg-no-repeat'>
             <div className='py-6 px-10 bg-white rounded-md lg:w-[30%]'>
                 <div className='flex flex-col justify-center items-center'>
                     <img src={Logo} width={175} alt="logo" />
@@ -42,10 +44,10 @@ const Login = () => {
                         <input type="password" value={password} onChange={(e) => { setPassword(e.target.value) }} name="password" placeholder="Enter password here..." className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-base rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2 " required />
                     </div>
 
-                    <button className="w-full my-4 text-white bg-blue-500 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2 text-center">Login</button>
+                    <button className="w-full my-4 text-white bg-main hover:bg-indigo-600 font-medium rounded-lg text-base px-5 py-2 text-center">Login</button>
                     <hr />
                     <p className="text-base text-center font-normal text-gray-500">
-                        Don't have an account? <Link to="/register" className="font-medium text-blue-600 hover:underline">Register here</Link>
+                        Don't have an account? <Link to="/register" className="font-medium text-main hover:underline">Register here</Link>
                     </p>
                 </form>
             </div>

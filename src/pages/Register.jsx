@@ -5,6 +5,7 @@ import { auth, db, storage } from "../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore"
 import { useNavigate, Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 // import ProfilePic from '../assets/Profile Icon.png'
 
 const Register = () => {
@@ -13,33 +14,53 @@ const Register = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [file, setFile] = useState([]);
+    const [file, setFile] = useState(null);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(name, email, password, file);
 
+        if(name.length < 3){
+            toast.error("Name must contain atleast 3 characters!");
+            return;
+        } else if(password.length < 6){
+            toast.error("Password must contain atleast 6 characters!");
+            return;
+        }
+
         try {
             //create user
             const res = await createUserWithEmailAndPassword(auth, email, password);
 
-            const storageRef = ref(storage, name);
-
-            uploadBytesResumable(storageRef, file).then(()=>{
-                getDownloadURL(storageRef).then(async (downloadURL) => {
-                    await updateProfile(res.user, {
-                        displayName: name,
-                        photoURL: downloadURL
+            if(file){
+                const storageRef = ref(storage, name);
+                uploadBytesResumable(storageRef, file).then(()=>{
+                    getDownloadURL(storageRef).then(async (downloadURL) => {
+                        await updateProfile(res.user, {
+                            displayName: name,
+                            photoURL: downloadURL
+                        });
+                        await setDoc(doc(db, "users", res.user.uid), {
+                            uid: res.user.uid,
+                            displayName: name.toLocaleLowerCase(),
+                            email,
+                            photoURL: downloadURL,
+                        })
                     });
-                    await setDoc(doc(db, "users", res.user.uid), {
-                        uid: res.user.uid,
-                        displayName: name.toLocaleLowerCase(),
-                        email,
-                        photoURL: downloadURL,
-                    })
                 });
-            });
-
+                toast.success("Registed Successfully");
+            } else {
+                await updateProfile(res.user, {
+                    displayName: name
+                });
+                await setDoc(doc(db, "users", res.user.uid), {
+                    uid: res.user.uid,
+                    displayName: name.toLocaleLowerCase(),
+                    email
+                })
+                toast.success("Registed Successfully");
+            }
+           
             //create empty user chats on firestore
             await setDoc(doc(db, "userChats", res.user.uid), {});
 
@@ -47,19 +68,19 @@ const Register = () => {
             setName("");
             setEmail("");
             setPassword("");
-            setFile([]);
+            setFile(null);
 
             navigate("/");
 
             console.log(res.user)
         } catch (error) {
             console.error("Error getting download URL:", error);
-            alert("Something went wrong");
+            toast.error("User already exist");
         }
     }
 
     return (
-        <div className='flex items-center justify-center h-screen bg-main'>
+        <div className='flex items-center justify-center h-screen bg-[url(./assets/bg-img3.jpg)] bg-cover bg-no-repeat'>
             <div className='py-6 px-8 bg-white rounded-md m-2 lg:w-[30%]'>
                 <div className='flex flex-col justify-center items-center'>
                     <img src={Logo} width={175} alt="logo" />
@@ -84,10 +105,10 @@ const Register = () => {
                         <input type="file" onChange={(e)=>{setFile(e.target.files[0])}} name="img" accept="image/*" className="mt-3 bg-gray-50 border border-gray-300 text-gray-900 sm:text-base rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-1" />
                     </div>
 
-                    <button type="submit" className="w-full my-4 text-white bg-blue-500 hover:bg-blue-700 font-medium rounded-lg text-base px-5 py-2 text-center">Create an account</button>
+                    <button type="submit" className="w-full my-4 text-white bg-main hover:bg-indigo-600 font-medium rounded-lg text-base px-5 py-2 text-center">Create an account</button>
                     <hr />
                     <p className="text-base text-center font-normal text-gray-500">
-                        Already have an account? <Link to="/login" className="font-medium text-blue-600 hover:underline">Login here</Link>
+                        Already have an account? <Link to="/login" className="font-medium text-main hover:underline">Login here</Link>
                     </p>
                 </form>
             </div>
