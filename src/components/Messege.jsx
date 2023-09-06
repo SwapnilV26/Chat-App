@@ -4,6 +4,7 @@ import { AuthContext } from '../context/AuthContext';
 import { arrayRemove, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { MdDelete } from 'react-icons/md';
+import ProfilePic from '../assets/Profile Icon.png'
 
 const Messege = ({ msg }) => {
   const { currentUser } = useContext(AuthContext);
@@ -36,7 +37,7 @@ const Messege = ({ msg }) => {
           <div ref={ref} className='flex flex-row-reverse gap-2 mb-3'>
             {/* user logo */}
             <div className='flex flex-col items-center text-gray-400 font-light -mt-1'>
-              <img src={currentUser.photoURL} className='rounded-full w-12 h-12 border-2 object-cover' alt="" />
+              <img src={currentUser.photoURL ? currentUser.photoURL : ProfilePic} className='rounded-full w-12 h-12 border-2 object-cover' alt="" />
             </div>
 
             {/* msg content  */}
@@ -52,7 +53,7 @@ const Messege = ({ msg }) => {
           :
           <div ref={ref} className='flex gap-2 mb-3'>
             <div className='flex flex-col items-center text-gray-400 font-light -mt-1'>
-              <img src={data.user.photoURL} className='rounded-full w-12 h-12 border-2 object-cover' alt="" />
+              <img src={data.user.photoURL ? data.user.photoURL : ProfilePic} className='rounded-full w-12 h-12 border-2 object-cover' alt="" />
             </div>
 
             <div className='flex flex-col max-w-[70%] gap-3 relative group'>

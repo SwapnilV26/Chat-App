@@ -22,11 +22,13 @@ const Search = () => {
 
   const handleSearch = async () => {
     if (username.trim() === "") {
+      setUser(null);
       return;
     }
     const q = query(
       collection(db, "users"),
-      where("displayName", "==", username.toLocaleLowerCase())
+      where("displayName", ">=", username.toLocaleLowerCase()),
+      where("displayName", "<=", username.toLocaleLowerCase()+'\uf8ff'),
     );
 
     try {
