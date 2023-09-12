@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { MdSend, MdDelete } from "react-icons/md";
 import { BiImageAdd } from "react-icons/bi";
+import { BsEmojiSunglasses } from "react-icons/bs";
 import { ChatContext } from "../context/ChatContext";
 import { AuthContext } from "../context/AuthContext";
 import {
@@ -13,10 +14,13 @@ import {
 import { db, storage } from "../firebase";
 import { v4 as uuid } from "uuid";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import { toast } from "react-toastify";
+import EmojiPicker from "emoji-picker-react";
 
 const MsgInput = () => {
   const [text, setText] = useState("");
   const [file, setFile] = useState(null);
+  const [showEmoji, setShowEmoji] = useState(false);
 
   const { currentUser } = useContext(AuthContext);
   const { data } = useContext(ChatContext);
@@ -49,7 +53,7 @@ const MsgInput = () => {
         }),
       });
     } else {
-      alert("Please write a message first!");
+      toast.error("Please write a message first!");
       return;
     }
 
@@ -80,6 +84,24 @@ const MsgInput = () => {
         }}
         className="bg-white flex items-center justify-between mx-3 w-full rounded-full border-[1px] border-gray-400 p-2"
       >
+        {showEmoji && (
+          <div className="absolute bottom-[100%] left-1 md:left-auto mr-5">
+            <EmojiPicker
+              onEmojiClick={(emojiObject)=> setText((prevMsg)=> prevMsg + emojiObject.emoji)}
+            />
+          </div>
+        )}
+        <span>
+          <BsEmojiSunglasses
+            onClick={() => {
+              setShowEmoji(!showEmoji);
+            }}
+            className={`ml-1 cursor-pointer ${
+              showEmoji ? "text-main" : "text-gray-400"
+            }`}
+            size={25}
+          />
+        </span>
         <input
           type="text"
           placeholder="Type something..."
@@ -98,7 +120,7 @@ const MsgInput = () => {
             onClick={() => {
               setFile(null);
             }}
-            className="text-2xl mr-2 cursor-pointer text-red-500"
+            className="text-2xl mr-2 -ml-1 cursor-pointer text-red-500"
           />
         </div>
       ) : (
