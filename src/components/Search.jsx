@@ -9,7 +9,7 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import { db } from "../firebase";
 import { AuthContext } from "../context/AuthContext";
@@ -19,6 +19,12 @@ const Search = () => {
   const [user, setUser] = useState(null);
 
   const { currentUser } = useContext(AuthContext);
+
+  useEffect(()=>{
+    if(username.trim() === ""){
+      setUser(null);
+    }
+  }, [username])
 
   const handleSearch = async () => {
     if (username.trim() === "") {
@@ -36,14 +42,22 @@ const Search = () => {
       querySnapshot.forEach((doc) => {
         setUser(doc.data());
       });
+
+      // if(user === null){
+      //   alert("ehhh")
+      // }
     } catch (error) {
       console.log("Seach", error);
     }
+
+    
   };
 
   const handleKey = (e) => {
     e.code === "Enter" && handleSearch();
   };
+
+  // console.log(user)  
 
   const handleSelect = async () => {
     //check whether the chat group(chats in firestore) exists, if not then create new group

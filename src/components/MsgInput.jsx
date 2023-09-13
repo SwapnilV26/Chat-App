@@ -15,7 +15,7 @@ import { db, storage } from "../firebase";
 import { v4 as uuid } from "uuid";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { toast } from "react-toastify";
-import EmojiPicker from "emoji-picker-react";
+import Picker from "emoji-picker-react";
 
 const MsgInput = () => {
   const [text, setText] = useState("");
@@ -42,6 +42,7 @@ const MsgInput = () => {
           });
         });
       });
+      setText("");
     } else if (text.trim() !== "") {
       // Set the "messages" field of the chats 'chatId'
       await updateDoc(doc(db, "chats", data.chatId), {
@@ -52,6 +53,7 @@ const MsgInput = () => {
           date: Timestamp.now(),
         }),
       });
+      setText("");
     } else {
       toast.error("Please write a message first!");
       return;
@@ -72,7 +74,8 @@ const MsgInput = () => {
       [data.chatId + ".date"]: serverTimestamp(),
     });
 
-    setText("");
+    
+    setShowEmoji(false);
     setFile(null);
   };
 
@@ -86,8 +89,8 @@ const MsgInput = () => {
       >
         {showEmoji && (
           <div className="absolute bottom-[100%] left-1 md:left-auto mr-5">
-            <EmojiPicker
-              onEmojiClick={(emojiObject)=> setText((prevMsg)=> prevMsg + emojiObject.emoji)}
+            <Picker
+              onEmojiClick={(emojiObject)=> setText((prev)=> prev + emojiObject.emoji)}
             />
           </div>
         )}
