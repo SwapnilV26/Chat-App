@@ -1,5 +1,5 @@
-import React, { useContext, useState } from "react";
-import { BsThreeDotsVertical } from "react-icons/bs";
+import React, { useContext, useEffect, useState } from "react";
+import { BsSearch, BsThreeDotsVertical } from "react-icons/bs";
 import { FiArrowLeft } from "react-icons/fi";
 import Messeges from "./Messeges";
 import MsgInput from "./MsgInput";
@@ -13,6 +13,13 @@ const ChatSection = () => {
   const { setShow } = useContext(AuthContext);
   const [toggle, setToggle] = useState(true);
   const [openModal, setOpenModal] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
+  const [search, setSearch] = useState("");
+
+  useEffect(()=>{
+    setShowSearch(false);
+    setSearch("");
+  }, [data.chatId])
 
   return (
     <main
@@ -22,7 +29,11 @@ const ChatSection = () => {
         <>
           {/* Chat info  */}
           <section className="flex justify-between items-center h-14 p-3 bg-main">
-            <div className="flex items-center gap-1">
+            <div
+              className={`flex items-center gap-1 ${
+                showSearch && "hidden lg:flex"
+              }`}
+            >
               <button
                 onClick={() => {
                   setShow(true);
@@ -41,38 +52,73 @@ const ChatSection = () => {
               </span>
             </div>
 
-            <div
-              onClick={() => {
-                setToggle(!toggle);
-              }}
-              className={`ml-auto mr-2 p-2.5 cursor-pointer relative rounded-full ${
-                !toggle && "bg-indigo-300"
-              }`}
-            >
-              <BsThreeDotsVertical size={18} className="text-gray-100" />
-              <div
-                className={`z-10 absolute bg-white divide-y right-0 top-[105%] divide-gray-100 rounded w-36 shadow-md ${
-                  toggle && "hidden"
-                } `}
-              >
-                <ul
-                  className="py-2 text-sm text-gray-700"
-                  aria-labelledby="dropdownDefaultButton"
-                >
-                  <li>
-                    <p
-                      onClick={() => {
-                        setOpenModal(true);
+            <div className="ml-auto flex items-center">
+              {showSearch && (
+                <div className="flex items-center justify-center gap-2 border-2 rounded-md bg-violet-500">
+                  <button
+                    onClick={() => {
+                      setShowSearch(false);
+                      setSearch("");
+                    }}
+                  >
+                    <FiArrowLeft size={20} className="text-slate-100 ml-2" />
+                  </button>
+                  <div className="flex items-center p-1.5 bg-slate-100 gap-1">
+                    <BsSearch size={16} className="text-violet-500" />
+                    <input
+                      type="search"
+                      name="search"
+                      placeholder="Search..."
+                      value={search}
+                      className="bg-slate-100 outline-none text-sm w-[260px]"
+                      onChange={(e) => {
+                        setSearch(e.target.value);
                       }}
-                      className="block px-4 py-2 hover:bg-gray-100"
-                    >
-                      Clear chat
-                    </p>
-                  </li>
-                  <li>
-                    <p className="block px-4 py-2 hover:bg-gray-100">Search</p>
-                  </li>
-                </ul>
+                    />
+                  </div>
+                </div>
+              )}
+
+              <div
+                onClick={() => {
+                  setToggle(!toggle);
+                }}
+                className={`p-2.5 cursor-pointer relative rounded-full ${
+                  (!toggle && "bg-indigo-300", showSearch && "hidden")
+                }`}
+              >
+                <BsThreeDotsVertical size={18} className="text-gray-100" />
+                <div
+                  className={`z-10 absolute bg-white divide-y right-0 top-[105%] divide-gray-100 rounded w-36 shadow-md ${
+                    toggle && "hidden"
+                  } `}
+                >
+                  <ul
+                    className="py-2 text-sm text-gray-700"
+                    aria-labelledby="dropdownDefaultButton"
+                  >
+                    <li>
+                      <p
+                        onClick={() => {
+                          setOpenModal(true);
+                        }}
+                        className="block px-4 py-2 hover:bg-gray-100"
+                      >
+                        Clear chat
+                      </p>
+                    </li>
+                    <li>
+                      <p
+                        onClick={() => {
+                          setShowSearch(true);
+                        }}
+                        className="block px-4 py-2 hover:bg-gray-100"
+                      >
+                        Search
+                      </p>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
           </section>
@@ -87,7 +133,7 @@ const ChatSection = () => {
             </div>
           )}
 
-          <Messeges />
+          <Messeges searchText={search} />
           <MsgInput />
         </>
       ) : (

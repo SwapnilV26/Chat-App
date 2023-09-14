@@ -125,7 +125,7 @@ const Search = () => {
           <BsSearch className="text-violet-500" />
         </div>
         <input
-          type="text"
+          type="search"
           placeholder="Find a user to chat..."
           value={username}
           onKeyDown={handleKey}
